@@ -230,7 +230,7 @@ async function handler(ctx) {
 
     for (const q in queries) {
         if (q === 'city') {
-            queries[q] = queries[q] in locations ? locations[queries.city].toString() : (queries[q] = '0');
+            queries[q] = Object.hasOwn(locations, queries[q]) ? locations[queries.city].toString() : (queries[q] = '0');
         }
         query += `${q}=${queries[q]}&`;
     }
@@ -270,12 +270,12 @@ async function handler(ctx) {
                 const videos = detailResponse.data.match(/source: '(https:\/\/video\.zcool\.cn\/.*)',/g);
 
                 if (videos) {
-                    content('.video-content-box').each(function (i) {
+                    content('.video-content-box').each((i, el) => {
                         if (i >= videos.length) {
                             return;
                         }
 
-                        content(this).append(
+                        content(el).append(
                             renderDescription({
                                 video: videos[i].match(/source: '(https:\/\/video\.zcool\.cn\/.*)'/)[1],
                             })

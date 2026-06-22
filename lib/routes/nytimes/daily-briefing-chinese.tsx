@@ -44,9 +44,8 @@ async function handler() {
     const listData = JSON.parse(response.data.match(/"initialState":(.*),"config"/)[1]);
 
     let items = [];
-    for (const key of Object.keys(listData)) {
-        if (key.startsWith('Article:') && listData[key].url) {
-            const item = listData[key];
+    for (const [key, item] of Object.entries(listData)) {
+        if (key.startsWith('Article:') && item.url) {
             items.push({
                 link: item.url,
                 pubDate: parseDate(item.firstPublished),
@@ -70,8 +69,8 @@ async function handler() {
                 const images = detailResponse.data.match(/"url":"[^{}]+","name":"articleLarge"/g).map((e) => JSON.parse(`{${e}}`).url);
 
                 let i = 0;
-                content('figure').each(function () {
-                    content(this).html(
+                content('figure').each((_, el) => {
+                    content(el).html(
                         renderToString(
                             <figure>
                                 <img src={images[i++]} />

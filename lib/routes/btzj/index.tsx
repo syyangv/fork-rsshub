@@ -129,13 +129,13 @@ async function handler(ctx) {
 
                 content('.attachlist')
                     .find('a')
-                    .each(function () {
-                        content(this)
+                    .each((_, el) => {
+                        content(el)
                             .children('img')
-                            .attr('src', `${rootUrl}${content(this).children('img').attr('src')}`);
-                        content(this).attr(
+                            .attr('src', `${rootUrl}${content(el).children('img').attr('src')}`);
+                        content(el).attr(
                             'href',
-                            `${rootUrl}/${content(this)
+                            `${rootUrl}/${content(el)
                                 .attr('href')
                                 .replace(/^attach-dialog/, 'attach-download')}`
                         );
@@ -145,7 +145,7 @@ async function handler(ctx) {
 
                 item.description = content('.post').html();
                 item.author = content('.purple, .grey').first().prev().text();
-                item.pubDate = timezone(parseDate(content('.bg2 b').first().text()), +8);
+                item.pubDate = timezone(parseDate(content('.bg2 b').first().text()), 8);
 
                 if (torrents.length > 0) {
                     item.description += renderTorrents(torrents.toArray().map((t) => content(t).parent().html()));
